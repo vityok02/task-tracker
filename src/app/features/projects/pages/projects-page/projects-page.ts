@@ -9,6 +9,7 @@ import { ProjectsListComponent } from '../../components/projects-list/projects-l
 import { ProjectTemplateResponse } from '../../models/projectr-template-response';
 import { ProblemDetails } from '../../../../core/error-handling/problem-details';
 import { ProjectFormComponent } from "../../components/project-form/project-form.component";
+import { NotificationService } from '../../../../core/notification.service';
 
 @Component({
   selector: 'app-projects-page',
@@ -18,6 +19,7 @@ import { ProjectFormComponent } from "../../components/project-form/project-form
 })
 export class ProjectsPage {
   private readonly projectService = inject(ProjectService);
+  private readonly notificationService = inject(NotificationService);
 
   protected pagedProjects!: PagedList<ProjectResponse>;
   protected projectTemplates: ProjectTemplateResponse[] = [];
@@ -32,6 +34,7 @@ export class ProjectsPage {
       next: (response) => {
         this.pagedProjects.items.push(response);
         this.pagedProjects.totalCount++;
+        this.notificationService.showSuccess('Project created successfully!');
       },
       error: (error: ProblemDetails) => {
         console.error('Error creating project:', error);
@@ -44,6 +47,7 @@ export class ProjectsPage {
       next: () => {
         this.pagedProjects.items = this.pagedProjects.items.filter(p => p.id !== projectId);
         this.pagedProjects.totalCount--;
+        this.notificationService.showSuccess('Project deleted successfully!');
       }
     });
   }

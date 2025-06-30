@@ -1,5 +1,11 @@
 <div class="d-flex flex-row gap-3 p-4">
-  <app-project-form (projectCreated)="createProject($event)"></app-project-form>
+  <app-project-form
+    (projectCreated)="createProject($event)"
+    [projectTemplates]="projectTemplates"
+  ></app-project-form>
 
-  <app-projects-list [pagedList]="pagedProjects"></app-projects-list>
+  <app-projects-list
+    [pagedList]="pagedProjects"
+    (onDeleteProject)="deleteProject($event)"
+  ></app-projects-list>
 </div>

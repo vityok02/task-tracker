@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateProjectRequest } from '../../models/create-project-request';
 import { ProjectService } from '../../project.service';
+import { ProjectTemplateResponse } from '../../models/projectr-template-response';
 
 @Component({
   selector: 'app-project-form',
@@ -10,8 +11,9 @@ import { ProjectService } from '../../project.service';
   styles: ``
 })
 export class ProjectFormComponent {
+  @Input() projectTemplates: ProjectTemplateResponse[] = [];
   @Output() projectCreated = new EventEmitter<CreateProjectRequest>();
-  
+
   projectForm: FormGroup;
 
   constructor(private readonly fb: FormBuilder,
@@ -21,7 +23,8 @@ export class ProjectFormComponent {
       name: ['', Validators.required],
       description: [''],
       startDate: [new Date()],
-    })
+      templateId: [null, Validators.required],
+    });
   }
 
   createProject() {

@@ -22,6 +22,19 @@
   </div>
 
   <div class="mb-3">
+    <label for="templates" class="form-label">Templates</label>
+    <select
+      id="templates"
+      formControlName="templateId"
+      class="form-select"
+    >
+    @for (item of projectTemplates; track $index) {
+      <option [value]="item.id">{{ item.name }}</option>
+    }
+    </select>
+  </div>
+
+  <div class="mb-3">
     <label for="startDate" class="form-label">Start Date</label>
     <input
       type="date"
