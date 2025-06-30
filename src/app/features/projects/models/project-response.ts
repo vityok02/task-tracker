@@ -1,17 +1,11 @@
-export interface ProjectResponse {
+import { AuditableResponse } from '../../../core/models/auditable-response';
+
+export interface ProjectResponse extends AuditableResponse {
   id: string;
   name: string;
   description: string;
   startDate: Date;
   endDate: Date | null;
-
-  createdBy: string;
-  createdByName: string;
-  createdAt: Date;
-
-  updatedBy: string | null;
-  updatedByName: string | null;
-  updatedAt: Date | null;
 
   //states
 }

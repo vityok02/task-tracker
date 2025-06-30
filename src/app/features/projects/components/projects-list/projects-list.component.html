@@ -1,0 +1,18 @@
+@if (pagedList) {
+  <div class="row">
+    @for (project of pagedList.items; track project.id) {
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ project.name }}</h5>
+            <p class="card-text">{{ project.description }}</p>
+            <ul class="list-unstyled text-muted small mb-0">
+              <li>Created at: {{ project.createdAt | date }}</li>
+              <li>Created by: {{ project.createdByName }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

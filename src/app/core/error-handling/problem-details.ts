@@ -1,5 +1,7 @@
+import { ErrorType } from "./error-types";
+
 export interface ProblemDetails {
-  type: string;
+  type: ErrorType;
   title: string;
   status: number;
   detail: string | null;
