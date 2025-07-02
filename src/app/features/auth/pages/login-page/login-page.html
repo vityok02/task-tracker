@@ -1,5 +1,40 @@
-<label for="email">Email:</label>
-<input id="email" [formControl]="email" type="email" required />
-<label for="password">Password:</label>
-<input id="password" [formControl]="password" type="password" required />
-<button (click)="login()">Login</button>
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <form
+    class="bg-white p-4 rounded shadow"
+    style="width: 100%; max-width: 400px"
+  >
+    <h3 class="mb-4 text-center">Login to your account</h3>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        id="email"
+        [formControl]="email"
+        type="email"
+        class="form-control"
+        placeholder="Enter your email"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        id="password"
+        [formControl]="password"
+        type="password"
+        class="form-control"
+        placeholder="Enter your password"
+        required
+      />
+    </div>
+
+    <button (click)="login()" type="button" class="btn btn-primary w-100 mb-3">
+      Login
+    </button>
+
+    <div class="text-center">
+      Don't have an account yet? <a routerLink="/register">Register</a>
+    </div>
+  </form>
+</div>

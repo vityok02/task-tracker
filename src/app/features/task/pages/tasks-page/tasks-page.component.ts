@@ -1,4 +1,4 @@
-import { Component, inject, Input, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { combineLatest } from 'rxjs';
 import { CreateTaskRequest } from '../../models/create-task-request';
@@ -6,17 +6,16 @@ import { TaskService } from '../../task.service';
 import { StateService } from '../../../state/state.service';
 import { StateModel } from '../../../state/models/state.model';
 import { TasksListComponent } from "../../components/tasks-list/tasks-list.component";
-import { TaskFormComponent } from "../../components/task-form/task-form.component";
-import { DrawerComponent } from "../../../../shared/drawer/drawer.component";
+import { DrawerComponent } from "../../../../shared/components/drawer/drawer.component";
 import { TaskDetailsComponent } from "../../components/task-details/task-details.component";
 import { TaskResponse } from '../../models/task-response';
-import { ConfirmDeleteComponent } from '../../../../shared/confirm-delete/confirm-delete.component';
+import { ConfirmDeleteComponent } from '../../../../shared/components/confirm-delete/confirm-delete.component';
 import { NotificationService } from '../../../../core/notification.service';
 import { UpdateTaskRequest } from '../../models/update-task-request';
 
 @Component({
   selector: 'app-tasks-page',
-  imports: [TasksListComponent, TaskFormComponent, DrawerComponent, TaskDetailsComponent, DialogModule],
+  imports: [TasksListComponent, DrawerComponent, TaskDetailsComponent, DialogModule],
   templateUrl: './tasks-page.component.html',
   styles: ``
 })
@@ -26,8 +25,7 @@ export class TasksPageComponent implements OnInit {
   private readonly dialog = inject(Dialog);
   private readonly notificationService = inject(NotificationService);
 
-  @Input({ required: true })
-  protected projectId!: string;
+  protected projectId = input.required<string>();
 
   protected states = signal<StateModel[]>([]);
   protected selectedTask = signal<TaskResponse | null>(null);
@@ -52,6 +50,11 @@ export class TasksPageComponent implements OnInit {
       .flatMap(state => state.tasks)
       .find(t => t.id === taskId);
 
+    if (!task) {
+      this.notificationService.showError('Task not found.');
+      return;
+    }
+
     const ref = this.dialog.open(ConfirmDeleteComponent, {
       data: {
         title: 'Delete Task',
@@ -61,14 +64,13 @@ export class TasksPageComponent implements OnInit {
 
     ref.closed.subscribe(result => {
       if (result) {
-        this.deleteTask(taskId);
-        this.notificationService.showSuccess(`Task "${task?.name}" deleted successfully.`);
+        this.deleteTask(task!);
       }
     });
   }
 
   protected createTask(taskRequest: CreateTaskRequest) {
-    this.taskService.create(this.projectId, taskRequest).subscribe({
+    this.taskService.create(this.projectId(), taskRequest).subscribe({
       next: task => {
         this.states.update(states =>
           states.map(state => {
@@ -86,7 +88,7 @@ export class TasksPageComponent implements OnInit {
   }
 
   protected updateTask(task: UpdateTaskRequest) {
-    this.taskService.update(this.projectId, task.id, task).subscribe({
+    this.taskService.update(this.projectId(), task.id, task).subscribe({
       next: updatedTask => {
         this.states.update(states =>
           states.map(state => {
@@ -100,30 +102,33 @@ export class TasksPageComponent implements OnInit {
           })
         );
         this.selectedTask.set(updatedTask);
+        this.notificationService.showSuccess(`Task "${updatedTask.name}" updated successfully.`);
       }
     });
   }
 
-  private deleteTask(taskId: string) {
-    this.taskService.delete(this.projectId, taskId).subscribe({
-        next: () => {
-          this.states.update(states =>
-            states.map(state => {
-              if (state.tasks.some(task => task.id === taskId)) {
-                return {
-                  ...state,
-                  tasks: state.tasks.filter(task => task.id !== taskId)
-                };
-              }
-              return state;
-            })
-          );
-        }
-      });
+  private deleteTask(task: TaskResponse) {
+    this.taskService.delete(this.projectId(), task.id).subscribe({
+      next: () => {
+        this.states.update(states =>
+          states.map(state => {
+            if (state.tasks.some(t => t.id === task.id)) {
+              return {
+                ...state,
+                tasks: state.tasks.filter(t => t.id !== task.id)
+              };
+            }
+            return state;
+          })
+        );
+
+        this.notificationService.showSuccess(`Task "${task.name}" deleted successfully.`);
+      }
+    });
   }
 
   private loadTaskDetails(taskId: string) {
-    this.taskService.getById(this.projectId, taskId)
+    this.taskService.getById(this.projectId(), taskId)
       .subscribe({
         next: task => {
           this.selectedTask.set(task);
@@ -133,8 +138,8 @@ export class TasksPageComponent implements OnInit {
 
   private loadData() {
     combineLatest([
-      this.stateService.getStates(this.projectId),
-      this.taskService.getAll(this.projectId)
+      this.stateService.getStates(this.projectId()),
+      this.taskService.getAll(this.projectId())
     ]).subscribe(([states, tasks]) => {
       this.states
         .set(states

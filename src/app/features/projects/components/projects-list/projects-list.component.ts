@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, output, Output } from '@angular/core';
 import { ProjectResponse } from '../../models/project-response';
 import { PagedList } from '../../models/paged-list';
 import { DatePipe } from '@angular/common';
@@ -11,8 +11,8 @@ import { RouterModule } from '@angular/router';
   styles: ``
 })
 export class ProjectsListComponent {
-  @Input() pagedList: PagedList<ProjectResponse> | null = null;
-  @Output() onDeleteProject = new EventEmitter<string>();
+  pagedList = input.required<PagedList<ProjectResponse>>();
+  onDeleteProject = output<string>();
 
   deleteProject(projectId: string) {
     this.onDeleteProject.emit(projectId);

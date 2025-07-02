@@ -1,46 +1,12 @@
-<div class="container mt-4">
-  <div class="row">
+<div class="container-fluid py-4">
+  <div class="d-flex gap-3 overflow-auto flex-nowrap flex-grow">
     @for(state of states(); track state.id) {
-    <div class="col-md-4">
-      <div class="card mb-3">
-        <div
-          class="card-header text-white"
-          [style.backgroundColor]="state.color || '#6c757d'"
-        >
-          <h5 class="mb-0">{{ state.name }}</h5>
-        </div>
-        <div class="card-body p-2">
-          @if(state.tasks.length === 0) {
-          <p class="text-muted small">No tasks</p>
-          } @for(task of state.tasks; track task.id) {
-          <div class="card mb-2 shadow-sm">
-            <div class="card-body p-2">
-              <button
-                type="button"
-                class="btn btn-link p-0 mb-1 text-start"
-                (click)="selectTask(task.id)"
-              >
-                {{ task.name }}
-              </button>
-              @if(task.description) {
-              <p class="card-text small text-truncate">
-                {{ task.description }}
-              </p>
-              }
-              <button
-                (click)="deleteTask(task.id)"
-                class="btn btn-sm btn-danger float-end"
-                aria-label="Delete Task"
-              >
-                <i class="bi bi-trash"></i>
-                <span class="visually-hidden">Delete task</span>
-              </button>
-            </div>
-          </div>
-          }
-        </div>
-      </div>
-    </div>
+    <app-state-column
+      [state]="state"
+      (taskSelected)="selectTask($event)"
+      (taskCreated)="createTask($event)"
+      (taskDeleted)="deleteTask($event)"
+    ></app-state-column>
     }
   </div>
 </div>

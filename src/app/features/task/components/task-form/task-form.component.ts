@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateTaskRequest } from '../../models/create-task-request';
 
@@ -10,43 +10,45 @@ import { CreateTaskRequest } from '../../models/create-task-request';
 })
 export class TaskFormComponent implements OnInit {
   private readonly fb: FormBuilder = new FormBuilder();
-  private _states: { id: string; name: string }[] = [];
 
-  @Input({ required: true }) projectId!: string;
-  @Input({ required: true })
-  set states(value: { id: string; name: string }[]) {
-    this._states = value;
-    if (this.form) {
-      this.form.get('stateId')?.setValue(value[0]?.id || '');
-    }
-  }
-  get states(): { id: string; name: string }[] {
-    return this._states;
+  public stateId = input.required<string>();
+
+  public taskCreated = output<CreateTaskRequest>();
+
+  public blur() {
+    console.log('Form blurred');
+
   }
 
-  @Output() onTaskCreated = new EventEmitter<CreateTaskRequest>();
+  public form!: FormGroup;
+  public isFormVisible: boolean = false;
 
-  protected form!: FormGroup;
-
-  ngOnInit() {
+  public ngOnInit() {
     this.form = this.fb.group({
       name: ['', Validators.required],
-      stateId: [this.states[0]?.id || '', Validators.required]
     });
   }
 
-  create() {
+  public showForm() {
+    this.isFormVisible = true;
+  }
+
+  public hideForm() {
+    this.isFormVisible = false;
+    this.form.reset();
+  }
+
+  public create() {
     if (this.form.invalid) {
       return;
     }
 
     const taskRequest: CreateTaskRequest = {
       name: this.form.value.name,
-      stateId: this.form.value.stateId
+      stateId: this.stateId()
     };
 
-    this.form.reset();
-
-    this.onTaskCreated.emit(taskRequest);
+    this.taskCreated.emit(taskRequest);
+    this.hideForm();
   }
 }
