@@ -1,0 +1,17 @@
+<form [formGroup]="form" (ngSubmit)="create()" class="p-3 border rounded shadow-sm bg-light">
+  <div class="mb-3">
+    <label for="name" class="form-label">Task Name</label>
+    <input id="name" formControlName="name" class="form-control" placeholder="Enter task name" />
+  </div>
+
+  <div class="mb-3">
+    <label for="state" class="form-label">State</label>
+    <select id="state" formControlName="stateId" class="form-select">
+      @for (state of states; track state.id) {
+        <option [value]="state.id">{{ state.name }}</option>
+      }
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Create Task</button>
+</form>

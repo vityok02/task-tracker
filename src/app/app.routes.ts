@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { RegisterPage } from './features/auth/pages/register-page/register-page';
 import { ProjectsPage } from './features/projects/pages/projects-page/projects-page';
 import { LoginPage } from './features/auth/pages/login-page/login-page';
+import { TasksPageComponent } from './features/task/pages/tasks-page/tasks-page.component';
 
 export const routes: Routes = [
   {
@@ -15,5 +16,9 @@ export const routes: Routes = [
   {
     path: 'projects',
     component: ProjectsPage
+  },
+  {
+    path: 'projects/:projectId/tasks',
+    component: TasksPageComponent
   }
 ];

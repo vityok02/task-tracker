@@ -6,6 +6,7 @@ import { NotFoundErrorStrategy } from './strategies/not-found-error-strategy';
 import { ValidationErrorStrategy } from './strategies/validation-error-strategy';
 import { UnauthorizedErrorStrategy } from './strategies/unauthorized-error-strategy';
 import { DefaultErrorStrategy } from './strategies/default-error-strategy';
+import { ServerUnavailableErrorStrategy } from './strategies/server-unavailable-error-strategy';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class ErrorHandlerStrategyRegistryService {
     validation: ValidationErrorStrategy,
     notFound: NotFoundErrorStrategy,
     unauthorized: UnauthorizedErrorStrategy,
+    serverUnavailable: ServerUnavailableErrorStrategy,
     defaultStrategy: DefaultErrorStrategy
   ) {
     this.strategies = new Map<ErrorType, ErrorHandlerStrategy>([
@@ -29,7 +31,7 @@ export class ErrorHandlerStrategyRegistryService {
       [ErrorType.AlreadyExists, defaultStrategy],
       [ErrorType.InvalidToken, defaultStrategy],
       [ErrorType.InvalidOperation, defaultStrategy],
-      [ErrorType.ServerUnavailable, defaultStrategy]
+      [ErrorType.ServerUnavailable, serverUnavailable],
     ]);
   }
 
