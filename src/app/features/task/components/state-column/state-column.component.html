@@ -1,0 +1,24 @@
+<div class="card flex-shrink-0" style="width: 300px">
+  <div
+    class="card-header text-white"
+    [style.backgroundColor]="state().color || '#6c757d'"
+  >
+    <h5 class="mb-0">{{ state().name }}</h5>
+  </div>
+  <div class="card-body p-2" style="min-height: 100px">
+    @if(state().tasks.length === 0) {
+    <p class="text-muted small">No tasks</p>
+    } @for(task of state().tasks; track task.id) {
+    <app-task-item
+      [task]="task"
+      (taskSelected)="taskSelected.emit(task.id)"
+      (taskDeleted)="taskDeleted.emit(task.id)"
+    >
+    </app-task-item>
+    }
+  </div>
+  <app-task-form
+    [stateId]="state().id"
+    (taskCreated)="createTask($event)"
+  ></app-task-form>
+</div>

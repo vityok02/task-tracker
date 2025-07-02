@@ -1,53 +1,50 @@
-<!-- NAME -->
-<div class="d-flex align-items-center gap-2 mb-3">
-  @if (!isEditingName) {
-    <h5 class="mb-0">{{ task().name }}</h5>
+<div class="p-3 mb-3 shadow-sm bg-white">
+  <div class="d-flex align-items-center gap-2 mb-3">
+    @if (!isEditingName) {
+    <h5 class="mb-0 flex-grow-1">{{ task().name }}</h5>
     <button
-      class="btn p-0 border-0 bg-transparent text-body"
+      class="btn btn-sm btn-outline-secondary"
       type="button"
       aria-label="Edit name"
       (click)="startEditName()"
     >
       <i class="bi bi-pencil"></i>
     </button>
-  } @else {
+    } @else {
     <input
       [(ngModel)]="editedName"
       type="text"
-      class="form-control form-control-sm"
+      class="form-control form-control-sm mb-2"
       style="max-width: 300px"
     />
-    <button
-      class="btn btn-sm btn-success"
-      type="button"
-      (click)="saveName()"
-    >
-      <i class="bi bi-check"></i>
-    </button>
-    <button
-      class="btn btn-sm btn-secondary"
-      type="button"
-      (click)="cancelEditName()"
-    >
-      <i class="bi bi-x"></i>
-    </button>
-  }
-</div>
-
-<!-- DESCRIPTION -->
-<div class="mb-3">
-  <h6 class="text-muted mb-1 d-flex justify-content-between align-items-center">
-    <span>Description</span>
-    @if (!isEditingDescription) {
+    <div class="d-flex gap-2">
+      <button class="btn btn-sm btn-success" type="button" (click)="saveName()">
+        <i class="bi bi-check"></i>
+      </button>
       <button
-        class="btn p-0 border-0 bg-transparent text-secondary"
+        class="btn btn-sm btn-secondary"
+        type="button"
+        (click)="cancelEditName()"
+      >
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-1">
+      <h6 class="text-muted mb-0">Description</h6>
+      @if (!isEditingDescription) {
+      <button
+        class="btn btn-sm btn-outline-secondary"
         type="button"
         aria-label="Edit description"
         (click)="startEditDescription()"
       >
         <i class="bi bi-pencil"></i>
       </button>
-    } @else {
+      } @else {
       <div class="d-flex gap-2">
         <button
           class="btn btn-sm btn-success"
@@ -64,73 +61,64 @@
           <i class="bi bi-x"></i>
         </button>
       </div>
-    }
-  </h6>
-
-  @if (!isEditingDescription) {
-    @if(task().description) {
-      <p class="mb-0">{{ task().description }}</p>
-    } @else {
-      <p class="text-muted fst-italic mb-0">No description provided.</p>
-    }
-  } @else {
-    <textarea
-      [(ngModel)]="editedDescription"
-      class="form-control"
-      rows="3"
-    ></textarea>
-  }
-</div>
-
-
-<div class="mb-3 row">
-  <div class="col-6">
-    <h6 class="text-muted">State</h6>
-    <div
-      class="rounded px-2 py-1 text-white"
-      [style.backgroundColor]="task().stateColor || '#6c757d'"
-    >
-      {{ task().stateName }}
-    </div>
-  </div>
-</div>
-
-<div class="mb-3 row">
-  <div class="col-6">
-    <small class="text-muted">Start Date</small>
-    <div>
-      {{
-        task().startDate
-          ? (task().startDate | date : "mediumDate")
-          : "Not set"
-      }}
-    </div>
-  </div>
-  <div class="col-6">
-    <small class="text-muted">End Date</small>
-    <div>
-      {{
-        task().endDate ? (task().endDate | date : "mediumDate") : "Not set"
-      }}
-    </div>
-  </div>
-</div>
-
-<div>
-  <h6 class="text-muted">Tags</h6>
-  @if(task().tags && task().tags.length > 0) {
-    <div class="d-flex flex-wrap gap-1">
-      @for(tag of task().tags; track tag.id) {
-        <span
-          class="badge px-3 py-2"
-          [style.backgroundColor]="tag.color"
-          [style.color]="getTextColor(tag.color)"
-        >
-          {{ tag.name }}
-        </span>
       }
     </div>
-  } @else {
+
+    @if (!isEditingDescription) {
+      @if(task().description) {
+      <p class="mb-0">{{ task().description }}</p>
+      } @else {
+      <p class="text-muted fst-italic mb-0">No description provided.</p>
+      }
+    } @else {
+    <textarea
+      [(ngModel)]="editedDescription"
+      class="form-control mb-2"
+      rows="3"
+      style="resize: vertical;"
+    ></textarea>
+    }
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-6">
+      <h6 class="text-muted">State</h6>
+      <div
+        class="rounded px-2 py-1 text-white"
+        [style.backgroundColor]="task().stateColor || '#6c757d'"
+        style="box-shadow: 0 0 5px rgba(0,0,0,0.15);"
+      >
+        {{ task().stateName }}
+      </div>
+    </div>
+    <div class="col-6">
+      <small class="text-muted">Start Date</small>
+      <div>
+        {{ task().startDate ? (task().startDate | date : "mediumDate") : "Not set" }}
+      </div>
+      <small class="text-muted mt-2 d-block">End Date</small>
+      <div>
+        {{ task().endDate ? (task().endDate | date : "mediumDate") : "Not set" }}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h6 class="text-muted">Tags</h6>
+    @if(task().tags && task().tags.length > 0) {
+    <div class="d-flex flex-wrap gap-1">
+      @for(tag of task().tags; track tag.id) {
+      <span
+        class="badge rounded-pill px-3 py-2"
+        [style.backgroundColor]="tag.color"
+        [style.color]="getTextColor(tag.color)"
+      >
+        {{ tag.name }}
+      </span>
+      }
+    </div>
+    } @else {
     <p class="text-muted fst-italic">No tags assigned.</p>
-  }
+    }
+  </div>
 </div>

@@ -1,1 +1,6 @@
 @import 'ngx-toastr/toastr';
+
+/* WARN: overflow is hidden */
+body {
+  overflow: hidden;
+}

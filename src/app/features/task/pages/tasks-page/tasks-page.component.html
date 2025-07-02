@@ -1,13 +1,9 @@
-<app-task-form
-  [projectId]="projectId"
-  [states]="states()"
-  (onTaskCreated)="createTask($event)"
-></app-task-form>
-
 <app-tasks-list
+  [projectId]="projectId()"
   [states]="states()"
   (taskSelected)="openDetails($event)"
   (taskDeleted)="confirmDeleteTask($event)"
+  (taskCreated)="createTask($event)"
 ></app-tasks-list>
 
 @if (selectedTask()) {

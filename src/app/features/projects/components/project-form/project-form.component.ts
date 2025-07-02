@@ -23,7 +23,7 @@ export class ProjectFormComponent {
       name: ['', Validators.required],
       description: [''],
       startDate: [new Date()],
-      templateId: [null, Validators.required],
+      templateId: [null],
     });
   }
 
@@ -33,6 +33,8 @@ export class ProjectFormComponent {
       return;
     }
 
-    this.projectCreated.emit(this.projectForm.value);
+    const projectRequest = this.projectForm.value as CreateProjectRequest;
+
+    this.projectCreated.emit(projectRequest);
   }
 }

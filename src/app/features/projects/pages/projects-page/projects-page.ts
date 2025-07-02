@@ -8,18 +8,21 @@ import { CommonModule } from '@angular/common';
 import { ProjectsListComponent } from '../../components/projects-list/projects-list.component';
 import { ProjectTemplateResponse } from '../../models/projectr-template-response';
 import { ProblemDetails } from '../../../../core/error-handling/problem-details';
-import { ProjectFormComponent } from "../../components/project-form/project-form.component";
 import { NotificationService } from '../../../../core/notification.service';
+import { Dialog } from '@angular/cdk/dialog';
+import { ProjectFormModalComponent } from '../../components/form-modal/project-form-modal.component';
+import { ConfirmDeleteComponent } from '../../../../shared/components/confirm-delete/confirm-delete.component';
 
 @Component({
   selector: 'app-projects-page',
-  imports: [FormsModule, CommonModule, ProjectsListComponent, ProjectFormComponent],
+  imports: [FormsModule, CommonModule, ProjectsListComponent],
   templateUrl: './projects-page.html',
   styles: ``
 })
 export class ProjectsPage {
   private readonly projectService = inject(ProjectService);
   private readonly notificationService = inject(NotificationService);
+  private readonly dialog = inject(Dialog);
 
   protected pagedProjects!: PagedList<ProjectResponse>;
   protected projectTemplates: ProjectTemplateResponse[] = [];
@@ -29,7 +32,21 @@ export class ProjectsPage {
     this.loadTemplates();
   }
 
-  createProject(project: CreateProjectRequest) {
+  protected openProjectForm() {
+    const dialogRef = this.dialog.open(ProjectFormModalComponent, {
+      data: {
+        projectTemplates: this.projectTemplates
+      }
+    });
+
+    dialogRef.closed.subscribe(result => {
+      if (result) {
+        this.createProject(result as CreateProjectRequest);
+      }
+    });
+  }
+
+  protected createProject(project: CreateProjectRequest) {
     this.projectService.create(project).subscribe({
       next: (response) => {
         this.pagedProjects.items.push(response);
@@ -42,10 +59,32 @@ export class ProjectsPage {
     });
   }
 
-  deleteProject(projectId: string) {
-    this.projectService.delete(projectId).subscribe({
+  protected confirmDeleteProject(projectId: string) {
+    const project = this.pagedProjects.items.find(p => p.id === projectId);
+
+    if (!project) {
+      this.notificationService.showError('Project not found.');
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      data: {
+        title: 'Delete Project',
+        message: `Are you sure you want to delete this project: <strong>${project?.name}</strong>?`
+      }
+    })
+
+    dialogRef.closed.subscribe(result => {
+      if (result) {
+        this.deleteProject(project);
+      }
+    })
+  }
+
+  private deleteProject(project: ProjectResponse) {
+    this.projectService.delete(project.id).subscribe({
       next: () => {
-        this.pagedProjects.items = this.pagedProjects.items.filter(p => p.id !== projectId);
+        this.pagedProjects.items = this.pagedProjects.items.filter(p => p.id !== project.id);
         this.pagedProjects.totalCount--;
         this.notificationService.showSuccess('Project deleted successfully!');
       }

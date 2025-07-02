@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(BrowserAnimationsModule),
     provideToastr({
-      positionClass: 'toast-bottom-right',
+      positionClass: 'toast-top-right',
       timeOut: environment.notificationTimeout || 3000,
       closeButton: true,
     }),

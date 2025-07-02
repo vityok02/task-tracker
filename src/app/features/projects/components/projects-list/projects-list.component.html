@@ -1,19 +1,48 @@
-@if (pagedList) {
-  <div class="row">
-    @for (project of pagedList.items; track project.id) {
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body">
-            <a [routerLink]="['/projects', project.id, 'tasks']" class="card-title">{{ project.name }}</a>
-            <p class="card-text">{{ project.description }}</p>
-            <ul class="list-unstyled text-muted small mb-3">
-              <li>Created at: {{ project.createdAt | date }}</li>
-              <li>Created by: {{ project.createdByName }}</li>
-            </ul>
-            <button class="btn btn-danger btn-sm" (click)="deleteProject(project.id)">Delete</button>
-          </div>
+<div class="row">
+  @for (project of pagedList().items; track project.id) {
+  <div class="col-md-6 col-lg-4 mb-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div
+        class="card-header bg-light d-flex justify-content-between align-items-start"
+      >
+        <div class="fw-bold text-truncate w-75" title="{{ project.name }}">
+          {{ project.name }}
         </div>
+        <button
+          class="btn btn-sm p-0 border-0 bg-transparent text-danger"
+          (click)="deleteProject(project.id)"
+          aria-label="Delete project"
+          title="Delete project"
+        >
+          <i class="bi bi-trash"></i>
+        </button>
       </div>
-    }
+
+      <div class="card-body">
+        <p class="text-muted small mb-2">
+          {{ project.description || "No description" }}
+        </p>
+
+        <ul class="list-unstyled text-muted small mb-0">
+          <li>
+            <i class="bi bi-calendar-event me-1"></i>
+            {{ project.createdAt | date : "mediumDate" }}
+          </li>
+          <li>
+            <i class="bi bi-person-circle me-1"></i> {{ project.createdByName }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="card-footer bg-white border-0">
+        <a
+          [routerLink]="['/projects', project.id, 'tasks']"
+          class="btn btn-outline-primary w-100 btn-sm"
+        >
+          <i class="bi bi-kanban me-1"></i> View Tasks
+        </a>
+      </div>
+    </div>
   </div>
-}
+  }
+</div>

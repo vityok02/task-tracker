@@ -28,6 +28,7 @@
       formControlName="templateId"
       class="form-select"
     >
+    <option [value]="null" selected>Empty</option>
     @for (item of projectTemplates; track $index) {
       <option [value]="item.id">{{ item.name }}</option>
     }
