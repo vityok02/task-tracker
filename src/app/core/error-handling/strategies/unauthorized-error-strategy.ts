@@ -10,6 +10,7 @@ export class UnauthorizedErrorStrategy implements ErrorHandlerStrategy {
   private readonly router = inject(Router);
 
   handle(problemDetails: ProblemDetails): void {
+    localStorage.removeItem('auth-token');
     this.router.navigate(['/login']);
   }
 }

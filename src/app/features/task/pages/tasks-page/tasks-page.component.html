@@ -1,0 +1,17 @@
+<app-task-form
+  [projectId]="projectId"
+  [states]="states()"
+  (onTaskCreated)="createTask($event)"
+></app-task-form>
+
+<app-tasks-list
+  [states]="states()"
+  (taskSelected)="openDetails($event)"
+  (taskDeleted)="confirmDeleteTask($event)"
+></app-tasks-list>
+
+@if (selectedTask()) {
+  <app-drawer [isOpen]="isDetailsOpen()" (onClose)="closeDetails()">
+    <app-task-details [task]="selectedTask()!" (taskUpdated)="updateTask($event)"></app-task-details>
+  </app-drawer>
+}

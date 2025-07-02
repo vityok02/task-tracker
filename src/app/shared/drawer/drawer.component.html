@@ -1,0 +1,10 @@
+<div class="drawer" [class.open]="isOpen">
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+
+  <ng-content></ng-content>
+</div>
