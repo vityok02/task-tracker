@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'app-drawer',
   imports: [],
   templateUrl: './drawer.component.html',
-  styleUrl: './drawer.component.css'
+  styleUrls: ['./drawer.component.css']
 })
 export class DrawerComponent {
   @Input() isOpen = false;
