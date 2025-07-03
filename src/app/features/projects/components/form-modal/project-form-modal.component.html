@@ -1,4 +1,20 @@
-<app-project-form
-  [projectTemplates]="data.projectTemplates"
-  (projectCreated)="createProject($event)"
-></app-project-form>
+<div class="modal-backdrop">
+  <div class="modal-window">
+    <app-project-form
+      [projectTemplates]="data.projectTemplates"
+      (projectCreated)="createProject($event)"
+    ></app-project-form>
+
+    <div class="d-flex flex-row gap-2">
+      <button
+        [disabled]="formComponent()?.projectForm?.invalid"
+        class="btn btn-primary"
+        (click)="submit()"
+      >
+        Create Project
+      </button>
+
+      <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+</div>
