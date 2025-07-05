@@ -5,13 +5,17 @@
     <a class="nav-link text-dark" routerLink="/projects">Projects</a>
 
     <div class="d-flex align-items-center gap-2 cursor-pointer">
-      <div
+      @if (user | async; as user) {
+      <img
         class="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center"
         style="width: 36px; height: 36px; font-weight: 700; user-select: none"
-      >
-        VK
-      </div>
-      <span class="fw-semibold">VictorK</span>
+        alt="User Avatar"
+        [src]="user.avatarUrl || ''"
+      />
+      <a [routerLink]="['/profile', user.id]" class="fw-semibold">{{
+        user.userName
+      }}</a>
+      }
     </div>
   </div>
 </nav>

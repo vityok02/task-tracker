@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center mt-5">
+  <div
+    class="card p-4 border-0 shadow-lg rounded-4 text-center"
+    style="max-width: 400px; width: 100%"
+  >
+    @if (user(); as user){ @if (user.avatarUrl) {
+    <img
+      [src]="user.avatarUrl"
+      alt="Avatar"
+      class="rounded-circle mx-auto mb-3 border border-3 border-light shadow"
+      style="width: 120px; height: 120px; object-fit: cover"
+    />
+    } @else {
+    <div
+      class="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center mx-auto mb-3 shadow"
+      style="
+        width: 120px;
+        height: 120px;
+        font-size: 36px;
+        font-weight: 600;
+        user-select: none;
+      "
+    >
+      {{ user.userName.slice(0, 2).toUpperCase() }}
+    </div>
+    }
+
+    <input
+      type="file"
+      id="avatarInput"
+      (change)="uploadFile($event)"
+      class="d-none"
+    />
+
+    <label
+      for="avatarInput"
+      class="btn btn-primary px-4 py-2 fw-semibold rounded mb-4 mx-4"
+      style="cursor: pointer"
+    >
+      Upload Avatar
+      <i class="bi bi-upload ms-2"></i>
+    </label>
+
+    <h2 class="fw-bold mb-1">{{ user.userName }}</h2>
+    <p class="text-muted mb-0">{{ user.email }}</p>
+    }
+  </div>
+</div>

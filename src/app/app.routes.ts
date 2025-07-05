@@ -5,6 +5,7 @@ import { LoginPage } from './features/auth/pages/login-page/login-page';
 import { TasksPageComponent } from './features/task/pages/tasks-page/tasks-page.component';
 import { AuthLayoutComponent } from './shared/layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
+import { ProfilePageComponent } from './features/user/profile-page/profile-page.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,10 @@ export const routes: Routes = [
       {
         path: 'projects/:projectId/tasks',
         component: TasksPageComponent
+      },
+      {
+        path: 'profile/:id',
+        component: ProfilePageComponent
       }
     ]
   },

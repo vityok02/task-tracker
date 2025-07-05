@@ -15,11 +15,6 @@ export class TaskFormComponent implements OnInit {
 
   public taskCreated = output<CreateTaskRequest>();
 
-  public blur() {
-    console.log('Form blurred');
-
-  }
-
   public form!: FormGroup;
   public isFormVisible: boolean = false;
 
